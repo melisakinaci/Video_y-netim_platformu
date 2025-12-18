@@ -44,10 +44,10 @@ class InteractionBase(ABC):
     @abstractmethod
     def process(self) -> bool:
         pass
-   
     @abstractmethod
-    def process(self) -> bool:
+    def validate(self) -> bool:
         pass
+
 
     @abstractmethod
     def to_dict(self) -> Dict[str, Any]:
@@ -56,8 +56,9 @@ class InteractionBase(ABC):
     def is_owner(self, user_id: str) -> bool:
         return self.user_id == user_id
     
-    def has_premission(self, user_id: str) -> bool:
+    def has_permission(self, user_id: str) -> bool:
         return self.is_owner(user_id) and self.is_active()
+
     
 
     @classmethod

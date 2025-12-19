@@ -1,9 +1,10 @@
 from abc import ABC
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from datetime import datetime 
 
 from base import InteractionBase
 
+## like - dislike etkileşimlerini yöneten sınıf
 class LikeInteraction(InteractionBase):
     total_likes = 0
     total_dislikes = 0
@@ -22,17 +23,18 @@ class LikeInteraction(InteractionBase):
         self.like_type = like_type
         self.created_at = datetime.now()
 
+        ## Global sayaçlar
         if like_type == "like":
             LikeInteraction.total_likes += 1
         else:
             LikeInteraction.total_dislikes += 1
-
+    #Etkileşimi işler
     def process(self) -> bool:
         if not self.validate():
             self.set_status("flagged")
             return False
         return True
-    
+    #Girdi doğrulama
     def validate(self) -> bool:
         if self.like_type not in ["like", "dislike"]:
             return False
@@ -42,9 +44,8 @@ class LikeInteraction(InteractionBase):
         
         if not self.user_id or not self.target_id:
             return False
-        
-        return False
     
+    # like - dislike geçişi
     def toggle(self) -> bool:
         if self.like_type == "like":
             self.like_type = "dislike"
@@ -67,6 +68,7 @@ class LikeInteraction(InteractionBase):
     def is_comment_like(self) -> bool:
         return self.target_type == "comment"
     
+    #Dictionary formatına çevirme
     def to_dict(self) -> Dict[str, Any]:
         return{
             "interaction_id": self.interaction_id,

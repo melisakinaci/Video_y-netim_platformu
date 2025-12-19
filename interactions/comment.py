@@ -1,6 +1,7 @@
 from typing import Dict, Any, List, Optional
 from interactions.base import InteractionBase
 
+#Yorum etkileşimlerini yöneten sınıf
 class CommentInteraction(InteractionBase):
     def __init__(
             self,
@@ -23,7 +24,8 @@ class CommentInteraction(InteractionBase):
         self.is_pinned = False
 
         self.flags: List[str] = []
-
+     
+    #Yorumu işleme
     def process(self) -> bool:
         if not self.validate():
             return False
@@ -33,6 +35,7 @@ class CommentInteraction(InteractionBase):
             return False
         return True
     
+    #Girdi doğrulama
     def validate(self) -> bool:
         if not self.comment_text:
             return False
@@ -44,6 +47,7 @@ class CommentInteraction(InteractionBase):
             return False
         return True
     
+    #Yorum metnini düzenleme
     def edit_comment(self, new_text: str) -> None:
         if not new_text or len(new_text.strip()) == 0:
             raise ValueError("Yorum metni boş olamaz.")
@@ -92,6 +96,7 @@ class CommentInteraction(InteractionBase):
     def is_long_comment(self) -> bool:
         return self.get_word_count() > 100
     
+    #Yorum önizlemesi
     def prewiew(self, lenght: int = 50) -> str:
         if len(self.comment_text) <= lenght:
             return self.comment_text
@@ -109,6 +114,7 @@ class CommentInteraction(InteractionBase):
             return 0.0
         return (self.like_count / total) * 100
     
+    #Yorum skorunu hesaplama
     def calculate_score(self) -> float:
         score = (
             self.like_count * 1.0 +
@@ -120,6 +126,7 @@ class CommentInteraction(InteractionBase):
     def is_popular(self) -> bool:
         return self.like_count >= 10 or self.reply_count >= 5
     
+    #Basit spam tespiti
     def detect_basic_spam(self) -> bool:
         text = self.comment_text.lower()
 
@@ -159,6 +166,7 @@ class CommentInteraction(InteractionBase):
     def is_flagged(self) -> bool:
         return len(self.flags) > 0 or self.status == "flagged"
     
+    #Dictionary formatına çevirme
     def to_dict(self) -> Dict[str, Any]:
         return{
             "interaction_id": self.interaction_id,

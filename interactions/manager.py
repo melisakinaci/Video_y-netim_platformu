@@ -86,6 +86,77 @@ class InteractionManager:
     def __str__(self) -> str:
         return f"InteractionManager(total_interactions = {self.get_total_count()})"
     
-    
 
+#Gün7 genişletme
+
+#Yorum (comment) işlemi
+    def get_comments_by_video(self, video_id: str) -> List[CommentInteraction]:
+        return [
+            c for c in self.get_comments()
+            if c.video_id == video_id
+        ]
+    
+    def get_flagged_comments(self) -> List[CommentInteraction]:
+        return [
+            c for c in self.get_comments()
+            if c.is_flagged()
+        ]
+    
+    def get_popular_comments(self) -> List[CommentInteraction]:
+        return [
+            c for c in self.get_comments()
+            if c.is_popular()
+        ]
+    
+#Like (beğenme) işlemi
+    def count_likes(self) -> int:
+        return len([ l for l in self.get_likes() if l.is_like()])
+    
+    def count_dislikes(self) -> int:
+        return len([ l for l in self.get_likes() if l.is_dislike()])
+    
+    def get_video_likes(self, video_id: str) -> List[LikeInteraction]:
+        return [
+            l for l in self.get_likes()
+            if l.target_type == "video" and l.target_id == video_id
+        ]
+    
+    def get_comment_likes(self, comment_id: str) -> List[LikeInteraction]:
+        return [
+            l for l in self.get_likes()
+            if l.target_type == "comment" and l.target_id == comment_id
+        ]
+    
+#Subscription (abonelik) işkemi
+    def get_active_subscriptions(self) -> List[SubscriptionInteraction]:
+        return [
+            s for s in self.get_subscriptions()
+            if s.is_subscribed()
+        ]
+    
+    def get_channel_subscribers(self, channel_id: str) -> List[SubscriptionInteraction]:
+        return [
+            s for s in self.get_subscriptions()
+            if s.channel_id == channel_id and s.is_subscribed()
+        ]
+
+#Durum bazlı sayım
+    def count_by_status(self) -> Dict[str, int]:
+        result = {"active": 0, "deleted": 0, "flagged": 0}
+        for i in self.interactions:
+            result[i.status] += 1
+        return result
+    
+#Arama
+    def search_comments(self, keyword: str) -> List[CommentInteraction]:
+        keyword = keyword.lower()
+        return [
+            c for c in self.get_comments()
+            if keyword in c.comment_text.lower()
+        ]
+    
+#Export etme
+    def export_active(self) -> List[Dict[str, Any]]:
+        return [i.to_dict() for i in self.get_active()]
+    
         

@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Dict, Any
 from datetime import datetime 
 
-from base import InteractionBase
+from interactions.base import InteractionBase
 
 ## like - dislike etkileşimlerini yöneten sınıf
 class LikeInteraction(InteractionBase):

@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from datetime import datetime
 
-from base import InteractionBase
+from interactions.base import InteractionBase
 
 # Subscription (abonelik) etkileşimlerini yöneten sınıf
 class SubscriptionInteraction(InteractionBase):
